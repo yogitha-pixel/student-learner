@@ -31,9 +31,12 @@ import { StudyTimerModal } from './components/StudyTimerModal';
 import { SmartReminders } from './components/SmartReminders';
 import { TopicTipsModal } from './components/TopicTipsModal';
 import { AssignmentHelper } from './components/AssignmentHelper';
+import { N8nChatbot } from './components/N8nChatbot';
+import { N8nChatView } from './components/N8nChatView';
+import { Bot } from 'lucide-react';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'assignment' | 'timetable' | 'subjects' | 'progress'>('assignment');
+  const [activeTab, setActiveTab] = useState<'n8n-chat' | 'assignment' | 'timetable' | 'subjects' | 'progress'>('n8n-chat');
 
   // Core state
   const [subjects, setSubjects] = useState<Subject[]>(loadSavedSubjects);
@@ -364,7 +367,20 @@ export default function App() {
 
         {/* Tab Navigation */}
         <div className="flex items-center justify-between flex-wrap gap-3 border-b border-slate-200 pb-2">
-          <div className="flex items-center gap-1.5 bg-slate-200/70 p-1 rounded-2xl">
+          <div className="flex items-center gap-1.5 bg-slate-200/70 p-1 rounded-2xl flex-wrap">
+            <button
+              onClick={() => setActiveTab('n8n-chat')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+                activeTab === 'n8n-chat'
+                  ? 'bg-white text-indigo-700 shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Bot className="w-4 h-4 text-indigo-600" />
+              <span>n8n AI Chatbot</span>
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            </button>
+
             <button
               onClick={() => setActiveTab('assignment')}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
@@ -432,6 +448,8 @@ export default function App() {
         </div>
 
         {/* Tab Content */}
+        {activeTab === 'n8n-chat' && <N8nChatView />}
+
         {activeTab === 'assignment' && (
           <AssignmentHelper onAddTopicToStudyPlan={handleAddTopicToStudyPlan} />
         )}
@@ -520,6 +538,9 @@ export default function App() {
         onRebalanceSchedule={handleRebalanceSchedule}
         isRebalancing={isRebalancing}
       />
+
+      {/* Floating n8n AI Chatbot Widget */}
+      <N8nChatbot />
     </div>
   );
 }

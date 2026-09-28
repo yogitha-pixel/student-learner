@@ -612,6 +612,53 @@ Return valid JSON according to the schema.
   }
 });
 
+// Proxy endpoint for n8n Chatbot Webhook
+app.post('/api/n8n-chat', async (req: Request, res: Response) => {
+  try {
+    const webhookUrl = 'https://yeduvakala45.app.n8n.cloud/webhook/63a61329-e89a-4098-9507-c73ac253f6b6/chat';
+    const { message, chatInput, sessionId, action, prompt, query } = req.body;
+
+    const textToSend = chatInput || message || prompt || query || '';
+    const sid = sessionId || `session-${Date.now()}`;
+
+    // Standard n8n Chat Trigger payload + aliases
+    const payload = {
+      action: action || 'sendMessage',
+      sessionId: sid,
+      chatInput: textToSend,
+      message: textToSend,
+      prompt: textToSend,
+      query: textToSend,
+      input: textToSend,
+      question: textToSend,
+    };
+
+    const n8nResponse = await fetch(webhookUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json, text/plain, */*',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const contentType = n8nResponse.headers.get('content-type') || '';
+    if (contentType.includes('application/json')) {
+      const data = await n8nResponse.json();
+      return res.status(n8nResponse.status).json(data);
+    } else {
+      const text = await n8nResponse.text();
+      return res.status(n8nResponse.status).json({ output: text });
+    }
+  } catch (error: any) {
+    console.error('n8n Webhook proxy error:', error);
+    return res.status(500).json({
+      error: 'Failed to communicate with n8n chatbot webhook',
+      details: error.message,
+    });
+  }
+});
+
 // Vite Middleware for development or static serving for production
 async function startServer() {
   const isProduction = process.env.NODE_ENV === 'production';

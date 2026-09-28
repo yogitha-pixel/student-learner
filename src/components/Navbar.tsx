@@ -1,97 +1,180 @@
 import React from 'react';
-import { BookOpen, Flame, Bell, Sparkles, Timer, RefreshCw } from 'lucide-react';
-import { StudyStreak } from '../types';
+import {
+  UtensilsCrossed,
+  LayoutDashboard,
+  PlusCircle,
+  History,
+  BarChart3,
+  Sparkles,
+  TrendingDown,
+  RotateCcw,
+  BookOpen
+} from 'lucide-react';
 
 interface NavbarProps {
-  streak: StudyStreak;
-  onOpenTimer: () => void;
-  onOpenReminders: () => void;
-  unreadRemindersCount: number;
-  onSelectPreset: (key: string) => void;
-  isGenerating: boolean;
+  activeTab: 'dashboard' | 'add' | 'history' | 'stats' | 'ai' | 'instructions';
+  setActiveTab: (tab: 'dashboard' | 'add' | 'history' | 'stats' | 'ai' | 'instructions') => void;
+  onResetSample: () => void;
+  reductionPercent: number;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
-  streak,
-  onOpenTimer,
-  onOpenReminders,
-  unreadRemindersCount,
-  onSelectPreset,
-  isGenerating,
+  activeTab,
+  setActiveTab,
+  onResetSample,
+  reductionPercent,
 }) => {
   return (
-    <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Brand */}
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-500 flex items-center justify-center text-white shadow-md shadow-indigo-100">
-            <BookOpen className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-lg text-slate-900 tracking-tight">StudyPulse</span>
-              <span className="text-[11px] font-semibold bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full border border-indigo-200/60 flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-indigo-600" /> AI Powered
-              </span>
+    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-emerald-100 shadow-xs">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo & Brand */}
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab('dashboard')}>
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-md shadow-emerald-200">
+              <UtensilsCrossed className="w-5 h-5" />
             </div>
-            <p className="text-xs text-slate-500 hidden sm:block">AI Study Planner &amp; Assignment Helper</p>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="font-extrabold text-xl text-slate-900 tracking-tight">FoodWise</span>
+                <span className="text-[11px] font-bold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full border border-emerald-200/80">
+                  Campus Tracker
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-500 hidden sm:block">Students &amp; College Canteens Food Waste Reduction</p>
+            </div>
+          </div>
+
+          {/* Center Navigation Links */}
+          <nav className="hidden md:flex items-center gap-1 bg-slate-100/90 p-1.5 rounded-2xl text-xs font-semibold text-slate-600">
+            <button
+              onClick={() => setActiveTab('dashboard')}
+              className={`px-3 py-1.5 rounded-xl transition-all flex items-center gap-1.5 ${
+                activeTab === 'dashboard'
+                  ? 'bg-white text-emerald-700 shadow-sm font-bold'
+                  : 'hover:text-slate-900'
+              }`}
+            >
+              <LayoutDashboard className="w-3.5 h-3.5" />
+              <span>Dashboard</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('add')}
+              className={`px-3 py-1.5 rounded-xl transition-all flex items-center gap-1.5 ${
+                activeTab === 'add'
+                  ? 'bg-emerald-600 text-white shadow-sm font-bold'
+                  : 'hover:text-slate-900'
+              }`}
+            >
+              <PlusCircle className="w-3.5 h-3.5" />
+              <span>Add Waste</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('history')}
+              className={`px-3 py-1.5 rounded-xl transition-all flex items-center gap-1.5 ${
+                activeTab === 'history'
+                  ? 'bg-white text-emerald-700 shadow-sm font-bold'
+                  : 'hover:text-slate-900'
+              }`}
+            >
+              <History className="w-3.5 h-3.5" />
+              <span>Waste History</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('stats')}
+              className={`px-3 py-1.5 rounded-xl transition-all flex items-center gap-1.5 ${
+                activeTab === 'stats'
+                  ? 'bg-white text-emerald-700 shadow-sm font-bold'
+                  : 'hover:text-slate-900'
+              }`}
+            >
+              <BarChart3 className="w-3.5 h-3.5" />
+              <span>Statistics</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('ai')}
+              className={`px-3 py-1.5 rounded-xl transition-all flex items-center gap-1.5 ${
+                activeTab === 'ai'
+                  ? 'bg-white text-emerald-700 shadow-sm font-bold'
+                  : 'hover:text-slate-900'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+              <span>AI Suggestions</span>
+            </button>
+          </nav>
+
+          {/* Right Action buttons */}
+          <div className="flex items-center gap-2">
+            {/* Reduction improvement pill */}
+            <div
+              className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border ${
+                reductionPercent >= 0
+                  ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                  : 'bg-rose-50 text-rose-800 border-rose-200'
+              }`}
+              title="Week-over-week food waste reduction progress"
+            >
+              <TrendingDown className="w-3.5 h-3.5 text-emerald-600" />
+              <span>{reductionPercent > 0 ? `-${reductionPercent}% Waste` : 'Tracking'}</span>
+            </div>
+
+            {/* Run Guide / Instructions */}
+            <button
+              onClick={() => setActiveTab('instructions')}
+              className="text-xs font-semibold px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition-colors flex items-center gap-1"
+              title="View instructions on how to run and configure this project"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-slate-600" />
+              <span className="hidden lg:inline">How to Run</span>
+            </button>
+
+            {/* Reset Sample Button */}
+            <button
+              onClick={onResetSample}
+              className="text-xs font-semibold px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 rounded-xl border border-amber-200/80 transition-colors flex items-center gap-1"
+              title="Reload sample campus data for easy testing"
+            >
+              <RotateCcw className="w-3.5 h-3.5 text-amber-600" />
+              <span className="hidden sm:inline">Reset Demo Data</span>
+            </button>
           </div>
         </div>
 
-        {/* Center / Quick Presets for Demo */}
-        <div className="hidden md:flex items-center gap-1.5 bg-slate-100/80 p-1 rounded-xl text-xs">
-          <span className="px-2 text-slate-500 font-medium">Quick Presets:</span>
+        {/* Mobile Navigation bar */}
+        <div className="flex md:hidden items-center justify-between py-2 border-t border-slate-100 text-xs font-semibold overflow-x-auto gap-1">
           <button
-            onClick={() => onSelectPreset('cs')}
-            className="px-2.5 py-1 rounded-lg text-slate-700 hover:bg-white hover:text-indigo-600 hover:shadow-sm transition-all font-medium"
+            onClick={() => setActiveTab('dashboard')}
+            className={`px-2.5 py-1 rounded-lg ${activeTab === 'dashboard' ? 'bg-emerald-100 text-emerald-800' : 'text-slate-600'}`}
           >
-            💻 CS Major
+            Dashboard
           </button>
           <button
-            onClick={() => onSelectPreset('premed')}
-            className="px-2.5 py-1 rounded-lg text-slate-700 hover:bg-white hover:text-rose-600 hover:shadow-sm transition-all font-medium"
+            onClick={() => setActiveTab('add')}
+            className={`px-2.5 py-1 rounded-lg ${activeTab === 'add' ? 'bg-emerald-600 text-white' : 'text-slate-600'}`}
           >
-            🩺 Pre-Med
+            + Add Log
           </button>
           <button
-            onClick={() => onSelectPreset('business')}
-            className="px-2.5 py-1 rounded-lg text-slate-700 hover:bg-white hover:text-amber-600 hover:shadow-sm transition-all font-medium"
+            onClick={() => setActiveTab('history')}
+            className={`px-2.5 py-1 rounded-lg ${activeTab === 'history' ? 'bg-emerald-100 text-emerald-800' : 'text-slate-600'}`}
           >
-            📊 Business
+            History
           </button>
-        </div>
-
-        {/* Right Actions */}
-        <div className="flex items-center gap-2.5">
-          {/* Streak indicator */}
-          <div
-            title={`${streak.totalSessionsCompleted} sessions completed so far!`}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 border border-amber-200/80 rounded-xl text-amber-900 text-xs font-semibold"
-          >
-            <Flame className="w-4 h-4 text-amber-500 fill-amber-500 animate-pulse" />
-            <span>{streak.currentStreak} Day{streak.currentStreak === 1 ? '' : 's'}</span>
-          </div>
-
-          {/* Quick Focus Timer */}
           <button
-            onClick={onOpenTimer}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-medium transition-colors"
-            title="Open Pomodoro / Study Timer"
+            onClick={() => setActiveTab('stats')}
+            className={`px-2.5 py-1 rounded-lg ${activeTab === 'stats' ? 'bg-emerald-100 text-emerald-800' : 'text-slate-600'}`}
           >
-            <Timer className="w-4 h-4 text-indigo-600" />
-            <span className="hidden sm:inline">Focus Timer</span>
+            Statistics
           </button>
-
-          {/* Reminders / Alerts */}
           <button
-            onClick={onOpenReminders}
-            className="relative p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-colors"
-            title="Exam countdowns and session reminders"
+            onClick={() => setActiveTab('ai')}
+            className={`px-2.5 py-1 rounded-lg ${activeTab === 'ai' ? 'bg-emerald-100 text-emerald-800' : 'text-slate-600'}`}
           >
-            <Bell className="w-5 h-5" />
-            {unreadRemindersCount > 0 && (
-              <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-rose-500 rounded-full ring-2 ring-white animate-pulse" />
-            )}
+            AI Advice
           </button>
         </div>
       </div>
