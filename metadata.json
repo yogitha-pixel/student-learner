@@ -1,0 +1,6 @@
+{
+  "name": "StudyPulse - College AI Study Planner",
+  "description": "Beginner-friendly AI study planner that transforms subjects, exam dates, and difficulty levels into realistic daily study timetables with progress tracking and smart reminders.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
